@@ -1,0 +1,38 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-clickhouse-task
+spec:
+  params:
+    - name: source-dir
+      type: string
+  workspaces:
+    - name: source
+  steps:
+    - name: install-dependencies
+      image: ubuntu:22.04
+      script: |
+        #!/bin/bash
+        set -e
+        apt-get update
+        apt-get install -y git cmake ccache python3 ninja-build nasm yasm gawk wget software-properties-common gnupg clang rustc cargo curl
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        . "$HOME/.cargo/env" || { echo "Rust environment setup failed"; exit 1; }
+        rustc --version
+        cargo --version
+        rustup update
+        rustup toolchain install nightly-2024-04-01
+        rustup default nightly-2024-04-01
+        rustup component add rust-src
+    - name: build
+      image: ubuntu:22.04
+      script: |
+        #!/bin/bash
+        set -e
+        cd "$(workspaces.source.path)/$(params.source-dir)"
+        mkdir -p build
+        cd build
+        cmake ..
+        echo "Number of available CPUs for building ClickHouse: $(nproc)"
+        cmake --build . -- -j$(nproc)
+        echo "Build completed successfully."

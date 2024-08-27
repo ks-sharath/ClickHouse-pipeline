@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: git-clone
+spec:
+  params:
+    - name: url
+      type: string
+      default: https://github.com/ClickHouse/ClickHouse.git
+    - name: revision
+      type: string
+      default: master
+  steps:
+    - name: clone
+      image: alpine/git
+      script: |
+        #!/bin/sh
+        mkdir -p /workspace/source
+        git clone $(params.url) /workspace/source
+        cd /workspace/source
+        git checkout $(params.revision)
+        echo -n "/workspace/source" > /tekton/results/repo-dir
+  workspaces:
+    - name: source

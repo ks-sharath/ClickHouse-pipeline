@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: clickhouse-build-pipelinerun
+spec:
+  pipelineRef:
+    name: clickhouse-build-pipeline
+  params:
+    - name: git-repo-url
+      value: https://github.com/ClickHouse/ClickHouse.git
+    - name: git-revision
+      value: master
+  workspaces:
+    - name: source
+      persistentVolumeClaim:
+        claimName: clickhouse-pvc
