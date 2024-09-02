@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: clone-clickhouse-pipeline
+  name: clickhouse-build-pipeline
 spec:
   params:
     - name: repository-url
@@ -23,4 +23,17 @@ spec:
           value: $(params.revision)
       workspaces:
         - name: output
+          workspace: shared-workspace
+    - name: build-clickhouse
+      taskRef:
+        name: build-clickhouse-task
+      params:
+        - name: repository-url
+          value: $(params.repository-url)
+        - name: revision
+          value: $(params.revision)
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+        - name: build-output
           workspace: shared-workspace
