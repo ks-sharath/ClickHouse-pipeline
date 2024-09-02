@@ -6,6 +6,7 @@ spec:
   params:
     - name: source-dir
       type: string
+      default: "src"  # Default to src if not provided
   workspaces:
     - name: source
   steps:
