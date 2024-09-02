@@ -6,7 +6,7 @@ spec:
   params:
     - name: source-dir
       type: string
-      default: "."  # Adjust as needed
+      default: "."
     - name: repository-url
       type: string
   workspaces:
@@ -34,4 +34,3 @@ spec:
           workspace: shared-workspace
         - name: build-output
           workspace: shared-workspace
-

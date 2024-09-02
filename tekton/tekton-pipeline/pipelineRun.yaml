@@ -7,11 +7,9 @@ spec:
     name: build-clickhouse-pipeline
   params:
     - name: source-dir
-      value: "."  # Adjust as needed
+      value: "."
     - name: repository-url
-      value: "https://github.com/ks-sharath/ClickHouse-pipeline.git"  # Replace with your actual repository URL
+      value: "https://github.com/ks-sharath/ClickHouse-pipeline.git"
   workspaces:
     - name: shared-workspace
-      persistentVolumeClaim:
-        claimName: your-pvc-name  # Replace with your PVC name if using a PVC
-
+      emptyDir: {}
