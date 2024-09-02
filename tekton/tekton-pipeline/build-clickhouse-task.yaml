@@ -6,7 +6,7 @@ spec:
   params:
     - name: source-dir
       type: string
-      default: "."  # This assumes that CMakeLists.txt is at the root of the source directory
+      default: "."
   workspaces:
     - name: source
     - name: build-output

@@ -7,7 +7,7 @@ spec:
     name: build-clickhouse-pipeline
   params:
     - name: source-dir
-      value: "."  # This should match the path to CMakeLists.txt
+      value: "."  # Adjust as needed
   workspaces:
     - name: shared-workspace
       persistentVolumeClaim:

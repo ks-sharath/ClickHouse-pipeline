@@ -6,10 +6,9 @@ spec:
   params:
     - name: source-dir
       type: string
-      default: "."  # The default value should match the path relative to the source workspace
+      default: "."  # Adjust as needed
   workspaces:
-    - name: source
-    - name: build-output
+    - name: shared-workspace
   tasks:
     - name: clone-repo
       taskRef:
@@ -27,4 +26,3 @@ spec:
           workspace: shared-workspace
         - name: build-output
           workspace: shared-workspace
-
