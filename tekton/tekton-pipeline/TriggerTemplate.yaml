@@ -17,12 +17,12 @@ spec:
         generateName: clickhouse-build-run-
       spec:
         pipelineRef:
-          name: clickhouse-build-pipeline
+          name: build-clickhouse-pipeline
         params:
           - name: repository-url
             value: $(params.git-repo-url)
-          - name: revision
-            value: $(params.git-revision)
+          - name: source-dir
+            value: $(params.git-revision)  # This might need to be adjusted based on your setup
         workspaces:
           - name: shared-workspace
             emptyDir: {}  # Using emptyDir for simplicity; use PVC in production

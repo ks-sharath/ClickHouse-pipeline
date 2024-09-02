@@ -42,4 +42,3 @@ spec:
         echo "Number of available CPUs for building ClickHouse: $(nproc)"
         cmake --build . -- -j$(nproc)
         echo "Build completed successfully."
-

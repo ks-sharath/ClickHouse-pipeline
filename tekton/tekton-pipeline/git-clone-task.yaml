@@ -21,4 +21,3 @@ spec:
         #!/bin/sh
         set -e
         git clone $(params.repository-url) $(workspaces.output.path) --branch $(params.revision)
-
