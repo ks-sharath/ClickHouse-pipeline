@@ -9,7 +9,7 @@ spec:
       default: master
     - name: git-repo-url
       description: The git repository URL
-      default: https://github.com/ks-sharath/ClickHouse-tekton.git
+      default: https://github.com/ks-sharath/ClickHouse-pipeline.git
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun

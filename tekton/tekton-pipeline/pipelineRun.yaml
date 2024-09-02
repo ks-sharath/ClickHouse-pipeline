@@ -7,7 +7,7 @@ spec:
     name: clone-clickhouse-pipeline
   params:
     - name: repository-url
-      value: https://github.com/ks-sharath/ClickHouse-tekton.git
+      value: https://github.com/ks-sharath/ClickHouse-pipeline.git
     - name: revision
       value: master
   workspaces:

@@ -5,7 +5,7 @@ metadata:
 spec:
   params:
     - name: repository-url
-      default: https://github.com/ks-sharath/ClickHouse-tekton.git
+      default: https://github.com/ks-sharath/ClickHouse-pipeline.git
       type: string
     - name: revision
       default: "master"
