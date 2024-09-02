@@ -4,14 +4,11 @@ metadata:
   name: clickhouse-build-pipeline-run
 spec:
   pipelineRef:
-    name: clickhouse-build-pipeline
+    name: build-clickhouse-pipeline
   params:
-    - name: repository-url
-      value: https://github.com/ks-sharath/ClickHouse-pipeline.git
-    - name: revision
-      value: master
+    - name: source-dir
+      value: "."  # This should match the path to CMakeLists.txt
   workspaces:
     - name: shared-workspace
-      emptyDir: {}
-    - name: build-output  # Ensure this is included if required
-      emptyDir: {}  # Or use a persistent volume claim if needed
+      persistentVolumeClaim:
+        claimName: your-pvc-name  # Replace with your PVC name if using a PVC

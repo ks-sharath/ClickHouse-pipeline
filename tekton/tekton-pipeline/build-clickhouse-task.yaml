@@ -6,30 +6,18 @@ spec:
   params:
     - name: source-dir
       type: string
+      default: "."  # This assumes that CMakeLists.txt is at the root of the source directory
   workspaces:
     - name: source
     - name: build-output
   steps:
-    - name: build
+    - name: install-dependencies
       image: ubuntu:22.04
       script: |
         #!/bin/bash
         set -e
-
-        # Update package lists
-        echo "Updating package lists..."
         apt-get update
-
-        # Install dependencies
-        echo "Installing dependencies..."
         apt-get install -y git cmake ccache python3 ninja-build nasm yasm gawk wget software-properties-common gnupg clang rustc cargo curl
-
-        # Verify installation
-        echo "Verifying cmake installation..."
-        cmake --version || { echo "cmake installation failed"; exit 1; }
-        
-        # Set up Rust environment
-        echo "Setting up Rust..."
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
         . "$HOME/.cargo/env" || { echo "Rust environment setup failed"; exit 1; }
         rustc --version
@@ -38,10 +26,16 @@ spec:
         rustup toolchain install nightly-2024-04-01
         rustup default nightly-2024-04-01
         rustup component add rust-src
-        
-        # Build ClickHouse
-        echo "Building ClickHouse..."
+    - name: build
+      image: ubuntu:22.04
+      script: |
+        #!/bin/bash
+        set -e
         cd "$(workspaces.source.path)/$(params.source-dir)"
+        if [ ! -f CMakeLists.txt ]; then
+          echo "CMakeLists.txt not found in the source directory"
+          exit 1
+        fi
         mkdir -p build
         cd build
         cmake ..
