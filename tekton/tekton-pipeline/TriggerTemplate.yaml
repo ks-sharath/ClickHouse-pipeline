@@ -17,7 +17,7 @@ spec:
         generateName: clickhouse-build-run-
       spec:
         pipelineRef:
-          name: clone-clickhouse-pipeline
+          name: clickhouse-build-pipeline
         params:
           - name: repository-url
             value: $(params.git-repo-url)

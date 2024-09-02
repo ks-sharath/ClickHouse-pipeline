@@ -10,9 +10,6 @@ spec:
     - name: revision
       default: "master"
       type: string
-    - name: source-dir
-      default: "src"  # Ensure this matches the directory in your repo
-      type: string
   workspaces:
     - name: shared-workspace
   tasks:
@@ -32,7 +29,9 @@ spec:
         name: build-clickhouse-task
       params:
         - name: source-dir
-          value: $(params.source-dir)
+          value: src  # Ensure this matches the actual source directory name in the repo
+        - name: revision
+          value: $(params.revision)
       workspaces:
         - name: source
           workspace: shared-workspace
