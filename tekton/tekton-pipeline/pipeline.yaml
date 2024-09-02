@@ -7,12 +7,20 @@ spec:
     - name: source-dir
       type: string
       default: "."  # Adjust as needed
+    - name: repository-url
+      type: string
   workspaces:
     - name: shared-workspace
   tasks:
     - name: clone-repo
       taskRef:
         name: git-clone-task
+      params:
+        - name: repository-url
+          value: "$(params.repository-url)"
+      workspaces:
+        - name: output
+          workspace: shared-workspace
     - name: build-clickhouse
       taskRef:
         name: build-clickhouse-task
@@ -26,3 +34,4 @@ spec:
           workspace: shared-workspace
         - name: build-output
           workspace: shared-workspace
+
