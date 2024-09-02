@@ -10,13 +10,26 @@ spec:
     - name: source
     - name: build-output
   steps:
-    - name: install-dependencies
+    - name: build
       image: ubuntu:22.04
       script: |
         #!/bin/bash
         set -e
+
+        # Update package lists
+        echo "Updating package lists..."
         apt-get update
+
+        # Install dependencies
+        echo "Installing dependencies..."
         apt-get install -y git cmake ccache python3 ninja-build nasm yasm gawk wget software-properties-common gnupg clang rustc cargo curl
+
+        # Verify installation
+        echo "Verifying cmake installation..."
+        cmake --version || { echo "cmake installation failed"; exit 1; }
+        
+        # Set up Rust environment
+        echo "Setting up Rust..."
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
         . "$HOME/.cargo/env" || { echo "Rust environment setup failed"; exit 1; }
         rustc --version
@@ -25,11 +38,9 @@ spec:
         rustup toolchain install nightly-2024-04-01
         rustup default nightly-2024-04-01
         rustup component add rust-src
-    - name: build
-      image: ubuntu:22.04
-      script: |
-        #!/bin/bash
-        set -e
+        
+        # Build ClickHouse
+        echo "Building ClickHouse..."
         cd "$(workspaces.source.path)/$(params.source-dir)"
         mkdir -p build
         cd build
@@ -37,3 +48,4 @@ spec:
         echo "Number of available CPUs for building ClickHouse: $(nproc)"
         cmake --build . -- -j$(nproc)
         echo "Build completed successfully."
+
