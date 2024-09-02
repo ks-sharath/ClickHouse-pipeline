@@ -4,31 +4,35 @@ metadata:
   name: build-clickhouse-task
 spec:
   params:
-    - name: repository-url
+    - name: source-dir
       type: string
-      description: The URL of the Git repository to clone
-    - name: revision
-      type: string
-      description: The Git revision to checkout
-      default: "master"
   workspaces:
     - name: source
-      description: The workspace to store the cloned repository
-    - name: build-output
-      description: The workspace to store build artifacts
   steps:
-    - name: clone
-      image: "alpine/git:v2.30.2"
+    - name: install-dependencies
+      image: ubuntu:22.04
       script: |
-        git clone $(params.repository-url) $(workspaces.source.path) --branch $(params.revision)
+        #!/bin/bash
+        set -e
+        apt-get update
+        apt-get install -y git cmake ccache python3 ninja-build nasm yasm gawk wget software-properties-common gnupg clang rustc cargo curl
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        . "$HOME/.cargo/env" || { echo "Rust environment setup failed"; exit 1; }
+        rustc --version
+        cargo --version
+        rustup update
+        rustup toolchain install nightly-2024-04-01
+        rustup default nightly-2024-04-01
+        rustup component add rust-src
     - name: build
-      image: "your-build-image"  # Replace with the appropriate build image
+      image: ubuntu:22.04
       script: |
-        cd $(workspaces.source.path)/docker/packager/binary-builder
-        ./build.sh
-      volumeMounts:
-        - name: build-output
-          mountPath: /output
-  volumes:
-    - name: build-output
-      emptyDir: {}  # Use PVC if needed
+        #!/bin/bash
+        set -e
+        cd "$(workspaces.source.path)/$(params.source-dir)"
+        mkdir -p build
+        cd build
+        cmake ..
+        echo "Number of available CPUs for building ClickHouse: $(nproc)"
+        cmake --build . -- -j$(nproc)
+        echo "Build completed successfully."
