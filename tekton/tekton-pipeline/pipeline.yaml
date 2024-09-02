@@ -12,6 +12,7 @@ spec:
       type: string
   workspaces:
     - name: shared-workspace
+    - name: build-output  # Ensure this is declared
   tasks:
     - name: clone-repo
       taskRef:
@@ -29,11 +30,9 @@ spec:
         name: build-clickhouse-task
       params:
         - name: source-dir
-          value: src  # Ensure this matches the actual source directory name in the repo
-        - name: revision
-          value: $(params.revision)
+          value: ""  # Provide the correct source-dir value
       workspaces:
         - name: source
           workspace: shared-workspace
         - name: build-output
-          workspace: shared-workspace
+          workspace: build-output  # Ensure this matches the declared workspace

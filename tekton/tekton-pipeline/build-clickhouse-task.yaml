@@ -6,10 +6,9 @@ spec:
   params:
     - name: source-dir
       type: string
-    - name: revision
-      type: string
   workspaces:
     - name: source
+    - name: build-output
   steps:
     - name: install-dependencies
       image: ubuntu:22.04

@@ -4,7 +4,7 @@ metadata:
   name: clickhouse-build-pipeline-run
 spec:
   pipelineRef:
-    name: clickhouse-build-pipeline  # Ensure this matches the pipeline name in pipeline.yaml
+    name: clickhouse-build-pipeline
   params:
     - name: repository-url
       value: https://github.com/ks-sharath/ClickHouse-pipeline.git
@@ -13,3 +13,5 @@ spec:
   workspaces:
     - name: shared-workspace
       emptyDir: {}
+    - name: build-output  # Ensure this is included if required
+      emptyDir: {}  # Or use a persistent volume claim if needed
