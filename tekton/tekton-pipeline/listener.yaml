@@ -3,7 +3,7 @@ kind: EventListener
 metadata:
   name: clickhouse-build-listener
 spec:
-  serviceAccountName: tekton-triggers-admin  # Replace with your service account
+  serviceAccountName: tekton-triggers-admin
   triggers:
     - bindings:
         - ref: clickhouse-build-binding

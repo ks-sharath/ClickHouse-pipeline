@@ -1,15 +1,16 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  name: clickhouse-build-pipeline-run
+  name: clone-clickhouse-pipeline-run
 spec:
   pipelineRef:
-    name: build-clickhouse-pipeline
+    name: clone-clickhouse-pipeline
   params:
-    - name: source-dir
-      value: "."
     - name: repository-url
-      value: "https://github.com/ks-sharath/ClickHouse-pipeline.git"
+      value: https://github.com/ks-sharath/ClickHouse-pipeline.git 
+    - name: revision
+      value: master
   workspaces:
     - name: shared-workspace
       emptyDir: {}
+  timeout: "9h"

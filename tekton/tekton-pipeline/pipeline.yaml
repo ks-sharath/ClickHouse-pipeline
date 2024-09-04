@@ -1,13 +1,14 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: build-clickhouse-pipeline
+  name: clone-clickhouse-pipeline
 spec:
   params:
-    - name: source-dir
-      type: string
-      default: "."
     - name: repository-url
+      default: https://github.com/ks-sharath/ClickHouse-pipeline.git 
+      type: string
+    - name: revision
+      default: "master"
       type: string
   workspaces:
     - name: shared-workspace
@@ -17,20 +18,9 @@ spec:
         name: git-clone-task
       params:
         - name: repository-url
-          value: "$(params.repository-url)"
+          value: $(params.repository-url)
+        - name: revision
+          value: $(params.revision)
       workspaces:
         - name: output
-          workspace: shared-workspace
-    - name: build-clickhouse
-      taskRef:
-        name: build-clickhouse-task
-      runAfter:
-        - clone-repo
-      params:
-        - name: source-dir
-          value: "$(params.source-dir)"
-      workspaces:
-        - name: source
-          workspace: shared-workspace
-        - name: build-output
           workspace: shared-workspace

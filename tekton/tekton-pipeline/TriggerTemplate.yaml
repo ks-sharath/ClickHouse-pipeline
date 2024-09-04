@@ -9,7 +9,7 @@ spec:
       default: master
     - name: git-repo-url
       description: The git repository URL
-      default: https://github.com/ks-sharath/ClickHouse-pipeline.git
+      default: https://github.com/ks-sharath/ClickHouse-pipeline.git  
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
@@ -17,12 +17,12 @@ spec:
         generateName: clickhouse-build-run-
       spec:
         pipelineRef:
-          name: build-clickhouse-pipeline
+          name: clone-clickhouse-pipeline
         params:
           - name: repository-url
             value: $(params.git-repo-url)
-          - name: source-dir
-            value: $(params.git-revision)  # This might need to be adjusted based on your setup
+          - name: revision
+            value: $(params.git-revision)
         workspaces:
           - name: shared-workspace
-            emptyDir: {}  # Using emptyDir for simplicity; use PVC in production
+            emptyDir: {}
